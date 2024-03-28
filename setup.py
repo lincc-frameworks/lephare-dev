@@ -43,7 +43,7 @@ class CMakeBuild(build_ext):
         cmake_args = [
             "-DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}",
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + extdir,
-            "-DPYTHON_EXECUTABLE=" + sys.executable,
+            # "-DPYTHON_EXECUTABLE=" + sys.executable,
         ]
 
         cfg = "Debug" if self.debug else "Release"
@@ -90,7 +90,6 @@ setup(
     author="Johann Cohen-Tanugi",
     author_email="johann.cohentanugi@gmail.com",
     url="https://gitlab.lam.fr/Galaxies/LEPHARE",
-    description="LEPHARE photometric redshift estimator",
     long_description=long_description,
     long_description_content_type="text/markdown",
     # add extension module
