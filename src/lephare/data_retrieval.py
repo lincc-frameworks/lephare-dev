@@ -11,6 +11,7 @@ import pooch
 import requests
 
 from lephare import LEPHAREDIR
+from lephare.prepare import all_types_to_keymap
 
 DEFAULT_BASE_DATA_URL = "https://raw.githubusercontent.com/lephare-photoz/lephare-data/main/"
 DEFAULT_REGISTRY_FILE = "data_registry.txt"
@@ -375,6 +376,8 @@ def config_to_required_files(keymap, base_url=None):
     required_files = []
     # We always need alloutputkeys.txt
     required_files += ["alloutputkeys.txt"]
+    # Typical users want the standard output.para
+    required_files += ["examples/output.para"]
     # Opacity always required
     opa_list = ["opa/OPACITY.dat"] + [f"opa/tau{i:02d}.out" for i in np.arange(81)]
     required_files += opa_list
@@ -426,6 +429,10 @@ def get_auxiliary_data(lephare_dir=LEPHAREDIR, keymap=None, additional_files=Non
     additional_files : list
         Any additional files to be downloaded from the auxiliary file repo.
     """
+
+    # ensure that all values in the keymap are keyword objects
+    keymap = all_types_to_keymap(keymap)
+
     # Get the registry file
     download_registry_from_github()
     base_url = DEFAULT_BASE_DATA_URL
