@@ -37,4 +37,5 @@ jobs:
         sudo apt-get install pandoc doxygen
     - name: Build docs
       run: |
-        sphinx-build -vvv -T -E -b html -d docs/build/doctrees ./docs docs/build/html
+        cd docs/
+        make html

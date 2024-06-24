@@ -1,4 +1,4 @@
-# lephare
+# LePHARE
 
 [![Template](https://img.shields.io/badge/Template-LINCC%20Frameworks%20Python%20Project%20Template-brightgreen)](https://lincc-ppt.readthedocs.io/en/latest/)
 
@@ -14,13 +14,20 @@ LePHARE computes photometric redshifts and physical parameters by fitting spectr
 
 ## Installation
 
-The simplest way to install lephare is using pip:
+LePHARE has been compiled and deployed on pypi for several systems; a list can be found at https://pypi.org/project/lephare/#files.
+The simplest way to install LePHARE is using pip:
 
 ```
 pip install lephare
 ```
 
 If you have any problems using pip install please consider creating an issue and informing us what system you are using in order to help us improve robustness.
+
+## Ancillary data files and environment variables
+The legacy code LePHARE has been split into two repositorie: (lephare)(https://github.com/lephare-photoz/lephare?tab=readme-ov-file)
+and (lephare-data)(https://github.com/lephare-photoz/lephare-data). The module `data_retrieval` helps the user with downloading the latter, based on
+the setting of the environment variable `LEPHAREDIR`.
+A second environment variable, `LEPHAREWORK`, controls where intermediary files are saved to and retrieved from, during LePHARE execution.
 
 ## Example usage
 
@@ -34,22 +41,46 @@ environments. If you have conda installed locally, you can run the following to
 create and activate a new environment.
 
 ```
->> conda create -n <env_name> python=3.10
->> conda activate <env_name>
+conda create -n <env_name>
+conda activate <env_name>
 ```
 
 Once you have created a new environment, you can install this project for local
 development using the following commands:
 
 ```
->> git submodule update --init --recursive
->> conda install -c conda-forge cxx-compiler
->> pip install -e .'[dev]'
->> pre-commit install
->> conda install pandoc
+git clone git@github.com:lephare-photoz/lephare.git
+git submodule update --init --recursive
+conda install -c conda-forge cxx-compiler #needed for MACOSX mostly
+pip install -e .'[dev]'
+pre-commit install
+conda install pandoc
+```
+The installation can then be tested by running `python -m pytest tests` from the root directory of the repository.
+
+In order to obtain the same directory hierarchy as the legacy fortran or c++ version, with the data files inside the
+repository directory structure, the following can be executed:
+
+```
+from lephare import data_retrieval as dr
+dr.get_auxiliary_data(lephare_dir=os.environ["LEPHAREDIR"], clone=False)
 ```
 
+
+Developers can also build the documentation in the following way:
+
+```
+cd docs/
+pip install -r requirements.txt #install sphinx dependencies
+make html
+```
+
+The doc entry will then be located at `../_readthedocs/html/index.html`. The documentation includes a rendering of
+the notebooks, which thus need to be executed. You can bypass this stage by replacing `make html` above by `make no-notebooks`.
+Executing `make` will list further options.
+
 Notes:
+
 1. The single quotes around `'[dev]'` may not be required for your operating system.
 2. `pre-commit install` will initialize pre-commit for this local repository, so
    that a set of tests will be run prior to completing a local commit. For more
